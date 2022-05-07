@@ -41,7 +41,7 @@ class FM_Layer(tf.keras.layers.Layer):
         # FM表达式二次交叉项-第一项
         cross_part_1 = tf.pow(tf.matmul(inputs, self.v), 2)  # shape: (batch_size, self.k)
         # FM二次交叉项-第二项
-        cross_part_2 = tf.matmul(tf.pow(self.v, 2), tf.pow(inputs, 2))  # shape: (batch_size, self.k)
+        cross_part_2 = tf.matmul(tf.pow(inputs, 2), tf.pow(self.v, 2))  # shape: (batch_size, self.k)
         # FM二次交叉项结果
         cross_part = 1 / 2 * tf.reduce_sum(cross_part_1 - cross_part_2, axis=-1,
                                            keepdims=True)  # shape: (batch_size, 1)
@@ -50,7 +50,7 @@ class FM_Layer(tf.keras.layers.Layer):
         return tf.nn.sigmoid(output)
 
 
-class FM(tf.keras.models):
+class FM(tf.keras.Model):
     def __init__(self, k, w_reg=1e-4, v_reg=1e-4):
         super(FM, self).__init__()
         self.fm = FM_Layer(k, w_reg, v_reg)
