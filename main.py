@@ -7,16 +7,26 @@
 import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression as sk_LR
 
-from models.LR import LinearRegression
+from models.LR import LogisticRegression as LR
 
 X, y = load_iris(return_X_y=True)
+X, y = X[:100, :], y[:100]
 
-lr = LinearRegression(learning_rate=1e-4)
-w = lr.train(X, y)
+# 自定义LR
+lr = LR(learning_rate=1e-1, tolerance=1e-4, n_iter=500)
+lr.fit(X, y)
+w, b = lr.w, lr.b
+pred = np.dot(w, X.T) + b
 
-pred = np.dot(w, np.insert(X, X.shape[1], 1, axis=1).T)
-labels = [1 if i >= 0.5 else 0 for i in pred]
-acc = accuracy_score(y, labels)
+# sklearn的LR
+sk_lr = sk_LR(l1_ratio=1e-1, tol=1e-4, max_iter=500, solver='sag')
+sk_lr.fit(X=X, y=y)
+sk_w = sk_lr.coef_
+sk_b = sk_lr.intercept_
+sk_pred = sk_lr.predict(X)
+
+acc = accuracy_score(y, pred)
 print(acc)
 
