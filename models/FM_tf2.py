@@ -7,6 +7,8 @@
 import tensorflow as tf
 import tensorflow.keras.backend as K
 
+"""tf2.0 实现的Factorization Machine"""
+
 
 class FM_Layer(tf.keras.layers.Layer):
     def __init__(self, k, w_reg, v_reg):
