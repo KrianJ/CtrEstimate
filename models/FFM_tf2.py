@@ -14,11 +14,11 @@ class FFM_layer(tf.keras.layers.Layer):
                  k: int, w_reg=1e-4, v_reg=1e-4):
         super(FFM_layer, self).__init__()
         self.dense_features = dense_features  # 稠密数值特征名称
-        self.sparse_feature = sparse_features  # 稀疏离散特征名称
+        self.sparse_features = sparse_features  # 稀疏离散特征名称
         self.sparse_feature_dim = sparse_feature_dim    # 稀疏类别特征的值数量(用于one hot编码)
 
         # 所有特征的数量(数值特征+类别特征)
-        self.n_field = len(self.dense_features) + len(self.sparse_feature)
+        self.n_field = len(self.dense_features) + len(self.sparse_features)
         # 经过编码后的数据集维度
         self.n_features = len(self.dense_features) + sum(self.sparse_feature_dim)
 
