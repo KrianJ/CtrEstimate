@@ -12,7 +12,7 @@ from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':
     (X_train, y_train), (X_test, y_test), (dense_fea, sparse_fea) = load_criteo_data('dataset/criteo_sample.csv',
-                                                                                     category_encoding='label_encoding')
+                                                                                     sparse_encoding='label_encoding')
     X_train = tf.cast(X_train, dtype=tf.float32)
     X_test = tf.cast(X_test, dtype=tf.float32)
     y_train = tf.cast(y_train, dtype=tf.float32)

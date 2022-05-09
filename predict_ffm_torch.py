@@ -8,7 +8,7 @@ from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':
     (X_train, y_train), (X_test, y_test), (dense_fea, sparse_fea) = load_criteo_data('dataset/criteo_sample.csv',
-                                                                                     category_encoding='label_encoding')
+                                                                                     sparse_encoding='label_encoding')
     X_train = torch.tensor(X_train, dtype=torch.float32)
     X_test = torch.tensor(X_test, dtype=torch.float32)
     y_train = torch.tensor(y_train, dtype=torch.float32)
