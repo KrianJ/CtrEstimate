@@ -62,7 +62,7 @@ class FFM_layer(tf.keras.layers.Layer):
         cross_part = 0.
         field_f = tf.tensordot(x, self.v, axes=1)  # 先计算V_ij * X_i, shape: (batch_size, n_field, k)
 
-        for i in range(self.n_field):  # 域Vi, Vj之间两两相乘, Vi, Vj为shape: (n_field, k)的隐向量矩阵
+        for i in range(self.n_field):  # 域Vi, Vj之间两两相乘, Vi, Vj为shape: (batch_size, k)的隐向量矩阵
             for j in range(i + 1, self.n_field):
                 v_i, v_j = field_f[:, i], field_f[:, j]
                 cross_part += tf.reduce_sum(tf.multiply(v_i, v_j), axis=1, keepdims=True)

@@ -31,9 +31,9 @@ if __name__ == '__main__':
     # 训练数据
     for i in range(epoch):
         model.train()
+        optimizer.zero_grad()
         logits = model(X_train)
         loss = criterion(logits, y_train)
-        optimizer.zero_grad()
         loss.backward()         # 根据损失反向更新
         optimizer.step()
         if i % 100 == 0 and epoch:

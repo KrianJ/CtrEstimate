@@ -33,13 +33,13 @@ class FM_Layer(nn.Module):
 
     def layer(self, x):
         # 线性部分
-        linear_part = torch.squeeze(self.w(x), 1)
+        linear_part = self.w(x)  # shape: (batch_size, 1)
         # FM表达式二次交叉项-第一项
         cross_part_1 = torch.pow(torch.mm(x, self.v), 2)  # shape: (batch_size, self.k)
         # FM二次交叉项-第二项
         cross_part_2 = torch.mm(torch.pow(x, 2), torch.pow(self.v, 2))  # shape: (batch_size, self.k)
         # FM二次交叉项结果
-        cross_part = 1 / 2 * torch.sum(cross_part_1 - cross_part_2, dim=1, keepdim=False)  # shape: (batch_size, 1)
+        cross_part = 1 / 2 * torch.sum(cross_part_1 - cross_part_2, dim=1, keepdim=True)  # shape: (batch_size, 1)
         output = linear_part + cross_part
         return torch.sigmoid(output)
 
