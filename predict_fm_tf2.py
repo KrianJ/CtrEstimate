@@ -7,7 +7,7 @@ from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':
     (X_train, y_train), (X_test, y_test), _ = load_criteo_data('dataset/criteo_sample.csv',
-                                                               sparse_encoding='one_hot')
+                                                               sparse_return='one_hot')
     k = 8
     w_reg = 1e-5
     v_reg = 1e-5

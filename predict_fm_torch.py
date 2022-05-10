@@ -13,7 +13,8 @@ from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':
     # 加载数据集
-    (X_train, y_train), (X_test, y_test), _ = load_criteo_data('dataset/criteo_sample.csv')
+    (X_train, y_train), (X_test, y_test), _ = load_criteo_data('dataset/criteo_sample.csv',
+                                                               sparse_return='one_hot')
     X_train = torch.tensor(X_train, dtype=torch.float32)
     X_test = torch.tensor(X_test, dtype=torch.float32)
     y_train = torch.tensor(y_train, dtype=torch.float32)
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     for i in range(epoch):
         model.train()
         optimizer.zero_grad()
-        logits = model(X_train)
+        logits = torch.reshape(model(X_train), (-1,))
         loss = criterion(logits, y_train)
         loss.backward()         # 根据损失反向更新
         optimizer.step()

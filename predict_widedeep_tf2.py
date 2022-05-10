@@ -11,19 +11,19 @@ from models.WideDeep_tf2 import WideDeep
 from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':
-    (X_train, y_train), (X_test, y_test), (dense_fea, sparse_fea) = \
-        load_criteo_data('dataset/criteo_sample.csv', sparse_encoding='both')
+    (X_train, y_train), (X_test, y_test), feature_info = \
+        load_criteo_data('dataset/criteo_sample.csv', sparse_return='both')
 
     # 参数初始化
     lr = 0.05
     hidden_units = [256, 128, 64]
     output_dim = 1
-    sparse_embed_dim = [8] * len(sparse_fea['feature'])
+    sparse_embed_dim = [8] * len(feature_info['sparse_feature'])
     activation = 'relu'
     n_epoch = 100
     # 模型初始化
-    model = WideDeep(dense_features=dense_fea, sparse_features=sparse_fea['feature'],
-                     sparse_one_hot_dim=sparse_fea['max_one_hot_dim'], sparse_embed_dim=sparse_embed_dim,
+    model = WideDeep(dense_features=feature_info['dense_feature'], sparse_features=feature_info['sparse_feature'],
+                     sparse_one_hot_dim=feature_info['max_one_hot_dim'], sparse_embed_dim=sparse_embed_dim,
                      hidden_units=hidden_units, output_dim=output_dim, activation=activation)
     optim = optimizers.SGD(learning_rate=lr)
     # 训练模型

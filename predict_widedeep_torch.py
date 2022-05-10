@@ -13,22 +13,25 @@ from models.WideDeep_torch import WideDeep
 
 if __name__ == '__main__':
     # 加载数据
-    (X_train, y_train), (X_test, y_test), (dense_fea, sparse_fea) = \
-        load_criteo_data('dataset/criteo_sample.csv', sparse_encoding='both')
+    (X_train, y_train), (X_test, y_test), feature_info = \
+        load_criteo_data('dataset/criteo_sample.csv', sparse_return='both')
     X_train = torch.tensor(X_train, dtype=torch.float32)
     X_test = torch.tensor(X_test, dtype=torch.float32)
     y_train = torch.tensor(y_train, dtype=torch.float32)
     y_test = torch.tensor(y_test, dtype=torch.float32)
 
     # 模型参数
-    sparse_one_hot_dim = sparse_fea['max_one_hot_dim']  # 每個类别特征的one-hot长度
-    sparse_embed_dim = [8] * len(sparse_fea['feature'])  # 每個类别特征映射成embedding的长度
+    sparse_one_hot_dim = feature_info['max_one_hot_dim']  # 每個类别特征的one-hot长度
+    sparse_embed_dim = [8] * len(feature_info['sparse_feature'])  # 每個类别特征映射成embedding的长度
     hidden_units = [256, 128, 64]
     output_dim = 1
     lr = 0.01
     n_epoch = 100
     # 初始化模型
-    model = WideDeep(dense_fea, sparse_fea['feature'], sparse_one_hot_dim, sparse_embed_dim,
+    model = WideDeep(dense_features=feature_info['dense_feature'],
+                     sparse_features=feature_info['sparse_feature'],
+                     sparse_one_hot_dim=sparse_one_hot_dim,
+                     sparse_embed_dim=sparse_embed_dim,
                      hidden_units=hidden_units, output_dim=output_dim)
     optim = torch.optim.SGD(lr=lr, params=model.parameters())
     criterion = F.binary_cross_entropy

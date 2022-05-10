@@ -54,8 +54,7 @@ class FFM_layer(tf.keras.layers.Layer):
             x = tf.concat(
                 [x, tf.one_hot(tf.cast(sparse_x[:, i], dtype=tf.int32),
                                depth=self.sparse_feature_dim[i])],
-                axis=1
-            )
+                axis=1)
         # 计算线性部分
         linear_part = tf.matmul(x, self.w) + self.w0  # shape: (batch_size, 1)
         # FFM交叉项第一部分
@@ -77,9 +76,10 @@ class FFM(tf.keras.Model):
         super(FFM, self).__init__()
         self.dense_features = dense_features  # 稠密数值特征
         self.sparse_features = sparse_features  # 稀疏离散特征
-        self.sparse_feature_dim = sparse_feature_dim
+        self.sparse_feature_dim = sparse_feature_dim    # 稀疏离散特征one-hot编码长度
         self.ffm = FFM_layer(dense_features, sparse_features, sparse_feature_dim, k, w_reg, v_reg)
 
     def call(self, inputs, training=None, mask=None):
+        """inputs = dense_data + sparse_category_data"""
         output = self.ffm(inputs)
         return output
