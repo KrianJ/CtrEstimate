@@ -54,6 +54,3 @@ class DeepFM(Model):
         deep_output = self.deep(x)
         output = tf.sigmoid(0.5 * (fm_output + deep_output))
         return output
-
-
-
