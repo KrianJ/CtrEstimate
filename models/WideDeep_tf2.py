@@ -36,12 +36,12 @@ class DeepLayer(Layer):
 
     def __init__(self, hidden_units, output_dim, activation):
         super(DeepLayer, self).__init__()
-        self.hidden_units = [Dense(i, activation=activation) for i in hidden_units]
+        self.hidden_layers = [Dense(i, activation=activation) for i in hidden_units]
         self.output_layer = Dense(output_dim, activation=None)  # 不做sigmoid
 
     def call(self, inputs, **kwargs):
         x = inputs
-        for layer in self.hidden_units:
+        for layer in self.hidden_layers:
             x = layer(x)
         output = self.output_layer(x)
         return output

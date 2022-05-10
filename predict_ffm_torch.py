@@ -19,7 +19,7 @@ if __name__ == '__main__':
     lr = 0.01
     # 初始化
     model = FFM_Layer(dense_features=dense_fea, sparse_features=sparse_fea['feature'],
-                      sparse_feature_dim=sparse_fea['max_depth'], k=k)
+                      sparse_feature_dim=sparse_fea['max_one_hot_dim'], k=k)
     optim = SGD(lr=lr, params=model.parameters())
     criterion = F.binary_cross_entropy
     # 训练模型

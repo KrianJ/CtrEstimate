@@ -36,7 +36,7 @@ def load_criteo_data(file, sparse_encoding="one_hot"):
             data[col] = LabelEncoder().fit_transform(data[col]).astype(int)
         # 稀疏类别特征的值数量
         sparse_fea_dim = data[sparse_fea].nunique().values
-        feature_info = [dense_fea,  {"feature": sparse_fea, 'max_depth': sparse_fea_dim}]
+        feature_info = [dense_fea,  {"feature": sparse_fea, 'max_one_hot_dim': sparse_fea_dim}]
     # both
     else:
         # 数值特征
@@ -51,7 +51,7 @@ def load_criteo_data(file, sparse_encoding="one_hot"):
         data = pd.concat([data['label'], dense_df, category_df, one_hot_df], axis=1)
         # 稀疏类别特征的值数量
         sparse_fea_dim = data[sparse_fea].nunique().values
-        feature_info = [dense_fea,  {"feature": sparse_fea, 'max_depth': sparse_fea_dim}]
+        feature_info = [dense_fea,  {"feature": sparse_fea, 'max_one_hot_dim': sparse_fea_dim}]
 
     # 数据集划分
     X, y = data.drop('label', axis=1).values, data['label']

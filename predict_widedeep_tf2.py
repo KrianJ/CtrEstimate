@@ -23,7 +23,7 @@ if __name__ == '__main__':
     n_epoch = 100
     # 模型初始化
     model = WideDeep(dense_features=dense_fea, sparse_features=sparse_fea['feature'],
-                     sparse_one_hot_dim=sparse_fea['max_depth'], sparse_embed_dim=sparse_embed_dim,
+                     sparse_one_hot_dim=sparse_fea['max_one_hot_dim'], sparse_embed_dim=sparse_embed_dim,
                      hidden_units=hidden_units, output_dim=output_dim, activation=activation)
     optim = optimizers.SGD(learning_rate=lr)
     # 训练模型
