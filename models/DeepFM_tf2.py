@@ -30,7 +30,9 @@ class DeepFM(Model):
             "embed_{}".format(fea): Embedding(sparse_one_hot_dim[i], sparse_embed_dim[i])
             for i, fea in enumerate(sparse_features)
         }
+        # FM Layer
         self.fm = FM_Layer(k, w_reg, v_reg)
+        # DNN Layer
         self.deep = DeepLayer(hidden_units, output_dim, activation)
 
     def call(self, inputs, training=None, mask=None):
