@@ -23,7 +23,7 @@ if __name__ == '__main__':
     lr = 0.01   # 0.05损失直接起飞
     # 初始化模型
     model = FFM(dense_features=dense_fea,
-                sparse_features=sparse_fea['feature'], sparse_feature_dim=sparse_fea['max_depth'],
+                sparse_features=sparse_fea['feature'], sparse_feature_dim=sparse_fea['max_one_hot_dim'],
                 k=k)
     optim = optimizers.SGD(learning_rate=lr)
     # 训练模型
