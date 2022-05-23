@@ -4,7 +4,6 @@
 # datetime:2022/5/8 21:32
 # software: PyCharm-FFM_tf2
 import tensorflow as tf
-import tensorflow.keras.backend as K
 
 """tensorflow2.0 实现的Field-aware模型"""
 

@@ -8,7 +8,7 @@ from torch.optim import SGD
 import torch.nn.functional as F
 from sklearn.metrics import accuracy_score
 
-from models.FM_torch import FM_Layer
+from models_torch.FM import FM_Layer
 from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':
@@ -26,21 +26,22 @@ if __name__ == '__main__':
     lr = 0.05
     epoch = 1000
 
-    model = FM_Layer(dim=dim, k=k)      # 模型
+    model = FM_Layer(dim=dim, k=k)  # 模型
     optimizer = SGD(model.parameters(), lr=lr)  # 优化器
-    criterion = F.binary_cross_entropy       # 损失
+    criterion = F.binary_cross_entropy  # 损失
     # 训练数据
     for i in range(epoch):
         model.train()
         optimizer.zero_grad()
         logits = torch.reshape(model(X_train), (-1,))
         loss = criterion(logits, y_train)
-        loss.backward()         # 根据损失反向更新
+        loss.backward()  # 根据损失反向更新
         optimizer.step()
         if i % 100 == 0 and epoch:
             print("epoch: {}, loss: {}".format(i, loss))
     # 测试
-    pred = model(X_test)
-    pred = [1 if x > 0.5 else 0 for x in pred]
-    print('Test acc: {}'.format(accuracy_score(y_test, pred)))
-
+    model.eval()
+    with torch.no_grad():
+        pred = model(X_test)
+        pred = [1 if x > 0.5 else 0 for x in pred]
+        print('Test acc: {}'.format(accuracy_score(y_test, pred)))

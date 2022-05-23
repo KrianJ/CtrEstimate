@@ -7,8 +7,9 @@
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Embedding
-from models.FM_tf2 import FM_Layer
-from models.WideDeep_tf2 import DeepLayer
+
+from models_tf2.FM import FM_Layer
+from models_tf2.WideDeep import DenseLayer
 
 
 class DeepFM(Model):
@@ -33,7 +34,7 @@ class DeepFM(Model):
         # FM Layer
         self.fm = FM_Layer(k, w_reg, v_reg)
         # DNN Layer
-        self.deep = DeepLayer(hidden_units, output_dim, activation)
+        self.deep = DenseLayer(hidden_units, output_dim, activation)
 
     def call(self, inputs, training=None, mask=None):
         """input为dense input + label_encoding sparse input"""

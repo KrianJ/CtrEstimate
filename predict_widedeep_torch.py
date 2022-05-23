@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from sklearn.metrics import accuracy_score
 
 from utils.load_data import load_criteo_data
-from models.WideDeep_torch import WideDeep
+from models_torch.WideDeep import WideDeep
 
 if __name__ == '__main__':
     # 加载数据
@@ -49,7 +49,8 @@ if __name__ == '__main__':
             print('epoch: {}, loss: {}'.format(epoch, loss))
     # 测试
     model.eval()
-    pred = torch.reshape(model(X_test), (-1,))
-    loss = criterion(pred, y_test)
-    pred = [1 if x > 0.5 else 0 for x in pred]
-    print('acc: {}, loss: {}'.format(accuracy_score(y_test, pred), loss))
+    with torch.no_grad():
+        pred = torch.reshape(model(X_test), (-1,))
+        loss = criterion(pred, y_test)
+        pred = [1 if x > 0.5 else 0 for x in pred]
+        print('acc: {}, loss: {}'.format(accuracy_score(y_test, pred), loss))

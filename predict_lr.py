@@ -9,7 +9,7 @@ from sklearn.datasets import load_iris
 from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LogisticRegression as sk_LR
 
-from models.LR import LogisticRegression as LR
+from LR import LogisticRegression as LR
 
 X, y = load_iris(return_X_y=True)
 X, y = X[:100, :], y[:100]

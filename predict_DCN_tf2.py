@@ -6,7 +6,7 @@
 import tensorflow as tf
 from sklearn.metrics import accuracy_score
 
-from models.DCN_tf2 import DCN
+from models_tf2.DCN import DCN
 from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':

@@ -5,46 +5,10 @@
 # software: PyCharm-WideDeep
 
 import tensorflow as tf
-from tensorflow.keras.layers import Embedding, Layer, Dense
+from tensorflow.keras.layers import Embedding
 from tensorflow.keras import Model
 
-
-class WideLayer(Layer):
-    """输入Dense feature + Sparse feature(one hot处理过的) + 特征组合"""
-
-    def __init__(self):
-        super(WideLayer, self).__init__()
-        self.w_reg = 1e-4
-
-    def build(self, input_shape):
-        self.w0 = self.add_weight(name='w0', shape=(1,),
-                                  initializer=tf.zeros_initializer(),
-                                  trainable=True)
-        self.w = self.add_weight(name='w', shape=(input_shape[-1], 1),
-                                 initializer=tf.random_normal_initializer(),
-                                 trainable=True,
-                                 regularizer=tf.keras.regularizers.l2(self.w_reg))
-
-    def call(self, inputs, **kwargs):
-        # 不做sigmoid, 与deep部分融合后再用sigmoid
-        output = tf.matmul(inputs, self.w) + self.w0  # shape: (batch_size, 1)
-        return output
-
-
-class DeepLayer(Layer):
-    """输入为Sparse经过one hot之后转换成的embedding"""
-
-    def __init__(self, hidden_units, output_dim, activation):
-        super(DeepLayer, self).__init__()
-        self.hidden_layers = [Dense(i, activation=activation) for i in hidden_units]
-        self.output_layer = Dense(output_dim, activation=None)  # 不做sigmoid
-
-    def call(self, inputs, **kwargs):
-        x = inputs
-        for layer in self.hidden_layers:
-            x = layer(x)
-        output = self.output_layer(x)
-        return output
+from models_tf2.base_layer import LR_Layer, DenseLayer
 
 
 class WideDeep(Model):
@@ -67,14 +31,14 @@ class WideDeep(Model):
         self.n_sparse = len(self.sparse_features)
 
         # Wide部分
-        self.wide = WideLayer()
+        self.wide = LR_Layer()
         # Deep部分: sparse feature的embedding layer(高维one-hot -> 低维embedding)
         self.embedding_layers = {
             'embed_{}'.format(i): Embedding(input_dim=sparse_one_hot_dim[i],
                                             output_dim=sparse_embed_dim[i])
             for i, fea in enumerate(self.sparse_features)
         }
-        self.deep = DeepLayer(hidden_units, output_dim, activation)
+        self.deep = DenseLayer(hidden_units, output_dim, activation)
 
     def call(self, inputs, training=None, mask=None):
         """inputs = [数值特征向量  label_encoding类别特征向量  one_hot类别特征向量]"""

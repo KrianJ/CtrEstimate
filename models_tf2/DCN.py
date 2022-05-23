@@ -8,7 +8,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Layer, Embedding, Dense
 from tensorflow.keras import Model
 
-from models.WideDeep_tf2 import DeepLayer
+from models_tf2.WideDeep import DenseLayer
 
 
 class CrossLayer(Layer):
@@ -70,7 +70,7 @@ class DCN(Model):
         # Cross Layer
         self.cross_part = CrossLayer(n_cross_layer)
         # 全连接层
-        self.dense_part = DeepLayer(hidden_units, output_dim, activation)
+        self.dense_part = DenseLayer(hidden_units, output_dim, activation)
         # 输出层
         self.output_layer = Dense(1, activation)
 

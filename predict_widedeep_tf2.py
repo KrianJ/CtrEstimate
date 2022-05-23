@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow.keras import optimizers, losses, metrics
 from sklearn.metrics import accuracy_score
 
-from models.WideDeep_tf2 import WideDeep
+from models_tf2.WideDeep import WideDeep
 from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':

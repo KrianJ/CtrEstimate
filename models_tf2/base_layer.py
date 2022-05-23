@@ -1,13 +1,51 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # author: KrianJ
-# datetime:2022/5/7 14:01
-# software: PyCharm-FM
-
+# datetime:2022/5/15 13:59
+# software: PyCharm-base_layer
+"""一些通用的网络层"""
 import tensorflow as tf
+from tensorflow.keras.layers import Dense, Layer, Dropout
 import tensorflow.keras.backend as K
 
-"""tf2.0 实现的Factorization Machine"""
+
+class LR_Layer(Layer):
+    """输入Dense feature + Sparse feature(one hot处理过的) + 特征组合"""
+
+    def __init__(self):
+        super(LR_Layer, self).__init__()
+        self.w_reg = 1e-4
+
+    def build(self, input_shape):
+        self.w0 = self.add_weight(name='w0', shape=(1,),
+                                  initializer=tf.zeros_initializer(),
+                                  trainable=True)
+        self.w = self.add_weight(name='w', shape=(input_shape[-1], 1),
+                                 initializer=tf.random_normal_initializer(),
+                                 trainable=True,
+                                 regularizer=tf.keras.regularizers.l2(self.w_reg))
+
+    def call(self, inputs, **kwargs):
+        # 不做sigmoid, 与deep部分融合后再用sigmoid
+        output = tf.matmul(inputs, self.w) + self.w0  # shape: (batch_size, 1)
+        return output
+
+
+class DenseLayer(Layer):
+
+    def __init__(self, hidden_units, output_dim, activation, dropout=0.):
+        super(DenseLayer, self).__init__()
+        self.hidden_layers = [Dense(i, activation=activation) for i in hidden_units]
+        self.output_layer = Dense(output_dim, activation=None)  # 不做sigmoid
+        self.dropout = Dropout(dropout)
+
+    def call(self, inputs, **kwargs):
+        x = inputs
+        for layer in self.hidden_layers:
+            x = layer(x)
+        x = self.dropout(x)
+        output = self.output_layer(x)
+        return output
 
 
 class FM_Layer(tf.keras.layers.Layer):
@@ -50,13 +88,3 @@ class FM_Layer(tf.keras.layers.Layer):
         # 输出结果
         output = linear_part + cross_part
         return tf.nn.sigmoid(output)
-
-
-class FM(tf.keras.Model):
-    def __init__(self, k, w_reg=1e-4, v_reg=1e-4):
-        super(FM, self).__init__()
-        self.fm = FM_Layer(k, w_reg, v_reg)
-
-    def call(self, inputs, training=None, mask=None):
-        output = self.fm(inputs)
-        return output

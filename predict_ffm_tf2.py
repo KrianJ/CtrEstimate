@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow.keras import optimizers, losses, metrics
 from sklearn.metrics import accuracy_score
 
-from models.FFM_tf2 import FFM
+from models_tf2.FFM import FFM
 from utils.load_data import load_criteo_data
 
 if __name__ == '__main__':
